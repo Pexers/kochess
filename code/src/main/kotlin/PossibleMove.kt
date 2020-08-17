@@ -1,0 +1,1 @@
+data class PossibleMove(val square: Square?, val moveType: MoveTypes)

@@ -1,4 +1,4 @@
-import Pieces.Pawn
+import pieces.Pawn
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
@@ -7,20 +7,21 @@ import kotlin.browser.window
 val squares = hashMapOf<String, Square>()
 var context: CanvasRenderingContext2D? = null
 var squareSelectedId: String? = null
+var currentPlayer: Players = Players.BLACKS
 
 fun main() {
     window.onload = {   // work after everything was loaded (DOM, media elements)
         context = initializeContext()
         context?.beginPath()
-        var color: String = WHITE_COLOR
+        var color: String = LIGHT_SQUARE_COLOR
         for (yIdx in 1..8) {
             for (xIdx in 1..8) {
                 val sq = getSquare(xIdx, yIdx, color)
                 sq.draw()
                 squares[sq.id] = sq
-                color = if (color === WHITE_COLOR) BLACK_COLOR; else WHITE_COLOR
+                color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR; else LIGHT_SQUARE_COLOR
             }
-            color = if (color === WHITE_COLOR) BLACK_COLOR; else WHITE_COLOR
+            color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR; else LIGHT_SQUARE_COLOR
         }
         null
     }
@@ -33,7 +34,7 @@ fun main() {
             val squareClicked = squares[getSquareId(xIdx, yIdx)]
             if (squareClicked != null) {
                 if (squareSelectedId == null) {
-                    if (squareClicked.piece != null) {
+                    if (squareClicked.hasPiece()) {
                         squareClicked.changeState(true, squareClicked)
                         squareSelectedId = squareClicked.id
                     }
@@ -54,7 +55,9 @@ fun getSquare(xIdx: Int, yIdx: Int, color: String): Square {
 
     }
     if (yIdx == 2 || yIdx == 7) {
-        return Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color, Pawn())
+        if (yIdx == 7)
+            currentPlayer = Players.WHITES
+        return Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color, Pawn(currentPlayer))
     }
     return Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color, null)
 }

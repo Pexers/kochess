@@ -1,4 +1,4 @@
-import Pieces.Piece
+import pieces.Piece
 
 class Square {
     val id: String
@@ -50,5 +50,7 @@ class Square {
             }
         }
     }
+
+    fun hasPiece(): Boolean = piece != null
 
 }
