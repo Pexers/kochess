@@ -1,22 +1,24 @@
 import pieces.Piece
+import kotlin.math.PI
 
 class Square {
     val id: String
     val x: Double
     val y: Double
-    val color: String
     var piece: Piece?
+    val squareColor: String
 
     constructor(id: String, x: Double, y: Double, color: String, piece: Piece?) {
         this.id = id
         this.x = x
         this.y = y
-        this.color = color
+        this.squareColor = color
         this.piece = piece
     }
 
-    fun draw() {
-        context?.fillStyle = color
+    fun drawSquare() {
+        context?.beginPath()
+        context?.fillStyle = squareColor
         context?.fillRect(
             x = x,
             y = y,
@@ -26,27 +28,51 @@ class Square {
         piece?.drawPiece(x, y)
     }
 
-    fun changeState(toSelect: Boolean, squareClicked: Square) {
+    fun drawSelection(){
         context?.beginPath()
-        context?.fillStyle = if (toSelect) SELECTED_COLOR else color
+        context?.fillStyle = SELECTED_COLOR
         context?.fillRect(
             x = x,
             y = y,
             w = SQUARE_SIZE,
             h = SQUARE_SIZE
         )
+        piece?.drawPiece(x, y)
+    }
+
+    fun drawPossibleMove() {
+        context?.beginPath()
+        context?.fillStyle = POSSIBLE_MOVE_COLOR
+        context?.arc(
+            x + SQUARE_SIZE / 2,
+            y + SQUARE_SIZE / 2,
+            CIRCLE_SIZE,
+            0.0,
+            PI * 2
+        )
+        context?.fill()
+    }
+
+    fun clearPossibleMove() {
+        drawSquare()
+        piece?.drawPiece(x, y)
+    }
+
+    fun changeState(toSelect: Boolean, squareClicked: Square) {
         if (toSelect) {
-            piece!!.drawPiece(x, y)
-            piece!!.drawPossibleMoves(x, y)
+            drawSelection()
+            piece!!.createPossibleMoves(x, y)
         } else {
             if (piece!!.isThisMovePossible(squareClicked.id)) {
-                piece!!.clearPossibleMoves()
-                piece!!.drawPiece(squareClicked.x, squareClicked.y)
+                piece!!.clearPossibleMoves(x, y)
                 squareClicked.piece = piece
+                squareClicked.piece?.allowedMoves = arrayListOf()
                 piece = null
+                drawSquare()
+                squareClicked.drawSquare()
             } else {
-                piece!!.drawPiece(x, y)
-                piece!!.clearPossibleMoves()
+                drawSquare()
+                piece!!.clearPossibleMoves(x, y)
             }
         }
     }

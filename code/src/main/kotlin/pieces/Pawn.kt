@@ -1,25 +1,45 @@
 package pieces
 
-import CIRCLE_SIZE
-import POSSIBLE_MOVE_COLOR
+import Directions
 import Players
 import PossibleMove
 import SQUARE_SIZE
 import Square
 import context
+import convertCordDoubleToInt
 import getSquareId
 import squares
-import kotlin.math.PI
 
 class Pawn : Piece {
 
     override val playerType: Players
-    override var possibleMoves: ArrayList<PossibleMove> = ArrayList()
+    override var possibleMoves: ArrayList<PossibleMove>
+    override var allowedMoves: ArrayList<String> = arrayListOf()
+    override var blockedDirections: ArrayList<Directions> = arrayListOf()
 
     constructor(playerType: Players) {
         this.playerType = playerType
+        when (playerType) {
+            Players.BLACKS -> possibleMoves = arrayListOf(
+                PossibleMove(0, 1, Directions.N, MoveTypes.NORMAL_MOVE, { true }),
+                PossibleMove(0, 2, Directions.N, MoveTypes.NORMAL_MOVE,
+                    { yIdx -> yIdx == 2 }
+                ),
+                PossibleMove(1, 1, Directions.NE, MoveTypes.EAT_MOVE, { true }),
+                PossibleMove(-1, 1, Directions.NW, MoveTypes.EAT_MOVE, { true })
+            )
+            Players.WHITES -> {
+                possibleMoves = arrayListOf(
+                    PossibleMove(0, -1, Directions.S, MoveTypes.NORMAL_MOVE, { true }),
+                    PossibleMove(0, -2, Directions.S, MoveTypes.NORMAL_MOVE,
+                        { yIdx -> yIdx == 7 }
+                    ),
+                    PossibleMove(-1, -1, Directions.SW, MoveTypes.EAT_MOVE, { true }),
+                    PossibleMove(1, -1, Directions.SE, MoveTypes.EAT_MOVE, { true })
+                )
+            }
+        }
     }
-
 
     override fun drawPiece(x: Double, y: Double) {
         context?.beginPath()
@@ -32,74 +52,43 @@ class Pawn : Piece {
         )
     }
 
-    override fun drawPossibleMoves(x: Double, y: Double) {
-        val xIdx: Int = (x / SQUARE_SIZE).toInt()
-        val yIdx: Int = (y / SQUARE_SIZE).toInt()
-        val posOrNeg = if (playerType == Players.WHITES) 1 else -1
-        val possibleMovesToEvaluate: Array<PossibleMove> = arrayOf(
-            PossibleMove(squares[getSquareId(xIdx, yIdx - (1 * posOrNeg))], MoveTypes.NORMAL_MOVE),
-            PossibleMove(
-                if ((yIdx == 2 && !isThisPieceWhite()) || (yIdx == 7 && isThisPieceWhite()))
-                    squares[getSquareId(xIdx, yIdx - (2 * posOrNeg))]
-                else null
-                , MoveTypes.NORMAL_MOVE
-            ),
-            PossibleMove(squares[getSquareId(xIdx + 1, yIdx - (1 * posOrNeg))], MoveTypes.EAT_MOVE),
-            PossibleMove(squares[getSquareId(xIdx - 1, yIdx - (1 * posOrNeg))], MoveTypes.EAT_MOVE)
-        )
-        for (move: PossibleMove in possibleMovesToEvaluate) {
-            if (move.moveType == MoveTypes.NORMAL_MOVE) {
-                if (move.square != null && !move.square.hasPiece()) {
-                    possibleMoves.add(move)
+    override fun createPossibleMoves(x: Double, y: Double) {
+        val xIdx: Int = convertCordDoubleToInt(x)
+        val yIdx: Int = convertCordDoubleToInt(y)
+        for (possibleMove: PossibleMove in possibleMoves) {
+            if (possibleMove.moveType == MoveTypes.NORMAL_MOVE) {
+                if (!blockedDirections.contains(possibleMove.direction)) {
+                    val possibleSquare: Square? =
+                        squares[getSquareId(xIdx + possibleMove.xCord, yIdx + possibleMove.yCord)]
+                    if (possibleSquare != null) {    // Checking if square exists
+                        if (possibleSquare.hasPiece()) {    // Blocking further moves
+                            blockedDirections.add(possibleMove.direction)
+                        } else if (possibleMove.condition(yIdx)) {
+                            possibleSquare.drawPossibleMove()
+                            allowedMoves.add(possibleSquare.id)
+                        }
+                    }
                 }
-            } else if (move.moveType == MoveTypes.EAT_MOVE
-                && move.square != null
-                && move.square.hasPiece()
-                && (playerType != move.square.piece!!.playerType)
-            ) {
-                possibleMoves.add(move)
+            } else if (possibleMove.moveType == MoveTypes.EAT_MOVE) {
+                val possibleSquare = squares[getSquareId(xIdx + possibleMove.xCord, yIdx + possibleMove.yCord)]
+                if (possibleSquare?.piece != null && possibleSquare.piece!!.playerType != playerType) {
+                    possibleSquare.drawPossibleMove()
+                    allowedMoves.add(possibleSquare.id)
+                }
             }
         }
-        for (possibleMove: PossibleMove in possibleMoves) {
-            context?.beginPath()
-            context?.fillStyle = POSSIBLE_MOVE_COLOR
-            context?.arc(
-                possibleMove.square!!.x + SQUARE_SIZE / 2,
-                possibleMove.square.y + SQUARE_SIZE / 2,
-                CIRCLE_SIZE,
-                0.0,
-                PI * 2
-            )
-            context?.fill()
-        }
     }
 
-    override fun clearPossibleMoves() {
-        var possibleSquare: Square
+    override fun clearPossibleMoves(x: Double, y: Double) {
+        val xIdx: Int = convertCordDoubleToInt(x)
+        val yIdx: Int = convertCordDoubleToInt(y)
         for (possibleMove: PossibleMove in possibleMoves) {
-            context?.beginPath()
-            possibleSquare = possibleMove.square!!
-            context?.fillStyle = possibleSquare.color
-            context?.fillRect(
-                x = possibleSquare.x,
-                y = possibleSquare.y,
-                w = SQUARE_SIZE,
-                h = SQUARE_SIZE
-            )
-            if (possibleSquare.hasPiece())
-                possibleSquare.piece!!.drawPiece(possibleSquare.x, possibleSquare.y)
+            val possibleSquare: Square? = squares[getSquareId(xIdx + possibleMove.xCord, yIdx + possibleMove.yCord)]
+            possibleSquare?.clearPossibleMove()
         }
-        possibleMoves = arrayListOf<PossibleMove>()
+        blockedDirections = arrayListOf()
     }
 
-    override fun isThisMovePossible(squareClickedId: String): Boolean {
-        for (possibleMove: PossibleMove in possibleMoves) {
-            if (possibleMove.square?.id == squareClickedId)
-                return true
-        }
-        return false
-    }
-
-    override fun isThisPieceWhite(): Boolean = playerType == Players.WHITES
+    override fun isThisMovePossible(squareId: String): Boolean = allowedMoves.contains(squareId)
 
 }

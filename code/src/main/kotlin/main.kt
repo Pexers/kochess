@@ -12,12 +12,11 @@ var currentPlayer: Players = Players.BLACKS
 fun main() {
     window.onload = {   // work after everything was loaded (DOM, media elements)
         context = initializeContext()
-        context?.beginPath()
         var color: String = LIGHT_SQUARE_COLOR
         for (yIdx in 1..8) {
             for (xIdx in 1..8) {
                 val sq = getSquare(xIdx, yIdx, color)
-                sq.draw()
+                sq.drawSquare()
                 squares[sq.id] = sq
                 color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR; else LIGHT_SQUARE_COLOR
             }
@@ -74,3 +73,4 @@ fun getSquareId(x: Int, y: Int): String {
     return (96 + y).toChar() + x.toString()
 }
 
+fun convertCordDoubleToInt(cord: Double): Int = (cord / SQUARE_SIZE).toInt()
