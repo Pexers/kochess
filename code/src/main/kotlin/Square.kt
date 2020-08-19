@@ -5,15 +5,43 @@ class Square {
     val id: String
     val x: Double
     val y: Double
-    var piece: Piece?
     val squareColor: String
+    var piece: Piece? = null
 
-    constructor(id: String, x: Double, y: Double, color: String, piece: Piece?) {
+    constructor(id: String, x: Double, y: Double, color: String) {
         this.id = id
         this.x = x
         this.y = y
         this.squareColor = color
+    }
+
+    fun setPiece(piece: Piece) {
         this.piece = piece
+    }
+
+    fun selectSquare() {
+        drawSelection()
+        piece!!.createPossibleMoves(x, y)
+    }
+
+    fun clearPossibleMove() {
+        drawSquare()
+        piece?.drawPiece(x, y)
+    }
+
+    fun tryToMovePiece(squareClicked: Square) { // Only called if square is selected and has a piece
+        if (piece!!.isThisMovePossible(squareClicked.id)) {
+            piece!!.clearPossibleMoves()
+            squareClicked.piece = piece
+            squareClicked.piece?.possibleMoves = arrayListOf()
+            piece = null
+            drawSquare()
+            squareClicked.drawSquare()
+            currentPlayer = if (currentPlayer == Players.WHITES) Players.BLACKS else Players.WHITES
+        } else {
+            drawSquare()
+            piece!!.clearPossibleMoves()
+        }
     }
 
     fun drawSquare() {
@@ -28,7 +56,7 @@ class Square {
         piece?.drawPiece(x, y)
     }
 
-    fun drawSelection(){
+    private fun drawSelection() {
         context?.beginPath()
         context?.fillStyle = SELECTED_COLOR
         context?.fillRect(
@@ -51,30 +79,6 @@ class Square {
             PI * 2
         )
         context?.fill()
-    }
-
-    fun clearPossibleMove() {
-        drawSquare()
-        piece?.drawPiece(x, y)
-    }
-
-    fun changeState(toSelect: Boolean, squareClicked: Square) {
-        if (toSelect) {
-            drawSelection()
-            piece!!.createPossibleMoves(x, y)
-        } else {
-            if (piece!!.isThisMovePossible(squareClicked.id)) {
-                piece!!.clearPossibleMoves(x, y)
-                squareClicked.piece = piece
-                squareClicked.piece?.allowedMoves = arrayListOf()
-                piece = null
-                drawSquare()
-                squareClicked.drawSquare()
-            } else {
-                drawSquare()
-                piece!!.clearPossibleMoves(x, y)
-            }
-        }
     }
 
     fun hasPiece(): Boolean = piece != null

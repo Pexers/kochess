@@ -15,12 +15,10 @@ fun main() {
         var color: String = LIGHT_SQUARE_COLOR
         for (yIdx in 1..8) {
             for (xIdx in 1..8) {
-                val sq = getSquare(xIdx, yIdx, color)
-                sq.drawSquare()
-                squares[sq.id] = sq
-                color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR; else LIGHT_SQUARE_COLOR
+                createSquare(xIdx, yIdx, color)
+                color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR else LIGHT_SQUARE_COLOR
             }
-            color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR; else LIGHT_SQUARE_COLOR
+            color = if (color === LIGHT_SQUARE_COLOR) DARK_SQUARE_COLOR else LIGHT_SQUARE_COLOR
         }
         null
     }
@@ -29,36 +27,38 @@ fun main() {
         if (squares.isNotEmpty()) {
             val xIdx: Int = (it.clientX / SQUARE_SIZE).toInt()
             val yIdx: Int = (it.clientY / SQUARE_SIZE).toInt()
-            println("X: $xIdx   Y: $yIdx")
             val squareClicked = squares[getSquareId(xIdx, yIdx)]
-            if (squareClicked != null) {
+            if (squareClicked != null) {    // Checking if square exists
                 if (squareSelectedId == null) {
-                    if (squareClicked.hasPiece()) {
-                        squareClicked.changeState(true, squareClicked)
+                    if (squareClicked.hasPiece() && squareClicked.piece!!.playerType == currentPlayer) {
+                        squareClicked.selectSquare()
                         squareSelectedId = squareClicked.id
                     }
                 } else {
                     val squareSelected = squares[squareSelectedId!!]
-                    squareSelected?.changeState(false, squareClicked)
+                    squareSelected?.tryToMovePiece(squareClicked)
                     squareSelectedId = null
                 }
             }
         }
         true
     }
-
 }
 
-fun getSquare(xIdx: Int, yIdx: Int, color: String): Square {
-    if (yIdx == 1 || yIdx == 8) {
-
+fun createSquare(xIdx: Int, yIdx: Int, color: String) {
+    val square = Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color)
+    when (yIdx) {
+        1, 8 -> {
+            //TODO
+        }
+        2, 7 -> {
+            if (yIdx == 7)
+                currentPlayer = Players.WHITES
+            square.setPiece(Pawn(currentPlayer))
+        }
     }
-    if (yIdx == 2 || yIdx == 7) {
-        if (yIdx == 7)
-            currentPlayer = Players.WHITES
-        return Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color, Pawn(currentPlayer))
-    }
-    return Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color, null)
+    square.drawSquare()
+    squares[square.id] = square
 }
 
 fun initializeContext(): CanvasRenderingContext2D {
@@ -73,4 +73,4 @@ fun getSquareId(x: Int, y: Int): String {
     return (96 + y).toChar() + x.toString()
 }
 
-fun convertCordDoubleToInt(cord: Double): Int = (cord / SQUARE_SIZE).toInt()
+fun convertCordToInt(cord: Double): Int = (cord / SQUARE_SIZE).toInt()
