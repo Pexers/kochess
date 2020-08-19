@@ -1,7 +1,7 @@
-data class PossibleMove(
+data class Move(
     val xCord: Int,
     val yCord: Int,
     val direction: Directions,
-    val moveType: MoveTypes,
+    val type: MoveTypes,
     val condition: (args: Any) -> Boolean
 )

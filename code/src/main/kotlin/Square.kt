@@ -21,7 +21,7 @@ class Square {
 
     fun selectSquare() {
         drawSelection()
-        piece!!.createPossibleMoves(x, y)
+        piece!!.createPossibleMoves(convertXCordToInt(x), convertYCordToInt(y))
     }
 
     fun clearPossibleMove() {

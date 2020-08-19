@@ -1,6 +1,6 @@
-import pieces.Pawn
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import pieces.*
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -25,7 +25,7 @@ fun main() {
 
     window.onmousedown = {
         if (squares.isNotEmpty()) {
-            val xIdx: Int = (it.clientX / SQUARE_SIZE).toInt()
+            val xIdx: Int = ((it.clientX / SQUARE_SIZE) - (POSITION_X / SQUARE_SIZE)).toInt()
             val yIdx: Int = (it.clientY / SQUARE_SIZE).toInt()
             val squareClicked = squares[getSquareId(xIdx, yIdx)]
             if (squareClicked != null) {    // Checking if square exists
@@ -46,12 +46,19 @@ fun main() {
 }
 
 fun createSquare(xIdx: Int, yIdx: Int, color: String) {
-    val square = Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color)
+    val square =
+        Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx + POSITION_X, SQUARE_SIZE * yIdx + POSITION_Y, color)
     when (yIdx) {
-        1, 8 -> {
-            //TODO
+        1, 8 -> {   // First row
+            when (xIdx) {
+                1, 8 -> square.setPiece(Tower(currentPlayer))
+                2, 7 -> square.setPiece(Horse(currentPlayer))
+                3, 6 -> square.setPiece(Bishop(currentPlayer))
+                4 -> square.setPiece(Queen(currentPlayer))
+                5 -> square.setPiece(King(currentPlayer))
+            }
         }
-        2, 7 -> {
+        2, 7 -> {   // Second/Pawns row
             if (yIdx == 7)
                 currentPlayer = Players.WHITES
             square.setPiece(Pawn(currentPlayer))
@@ -63,8 +70,8 @@ fun createSquare(xIdx: Int, yIdx: Int, color: String) {
 
 fun initializeContext(): CanvasRenderingContext2D {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
-    canvas.width = (SQUARE_SIZE * 10).toInt()
-    canvas.height = (SQUARE_SIZE * 10).toInt()
+    canvas.width = window.innerWidth - 50
+    canvas.height = window.innerHeight - 50
     document.body?.appendChild(canvas)
     return canvas.getContext("2d") as CanvasRenderingContext2D
 }
@@ -73,4 +80,6 @@ fun getSquareId(x: Int, y: Int): String {
     return (96 + y).toChar() + x.toString()
 }
 
-fun convertCordToInt(cord: Double): Int = (cord / SQUARE_SIZE).toInt()
+fun convertXCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE) - (POSITION_X / SQUARE_SIZE)).toInt()
+
+fun convertYCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE) - (POSITION_Y / SQUARE_SIZE)).toInt()

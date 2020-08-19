@@ -1,4 +1,5 @@
 enum class Directions {
     N, S, E, W,
-    NE, NW, SE, SW
+    NE, NW, SE, SW,
+    OTHER
 }
