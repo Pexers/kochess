@@ -3,16 +3,16 @@ import kotlin.math.PI
 
 class Square {
     val id: String
-    val x: Double
-    val y: Double
-    val squareColor: String
+    private val x: Double
+    private val y: Double
+    private val squareColor: String
     var piece: Piece? = null
 
-    constructor(id: String, x: Double, y: Double, color: String) {
+    constructor(id: String, x: Double, y: Double, squareColor: String) {
         this.id = id
         this.x = x
         this.y = y
-        this.squareColor = color
+        this.squareColor = squareColor
     }
 
     fun setPiece(piece: Piece) {

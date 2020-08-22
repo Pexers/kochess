@@ -24,21 +24,21 @@ class Pawn : Piece {
         this.playerType = playerType
         when (playerType) {
             Players.BLACKS -> existingMoves = arrayListOf(
-                Move(0, 1, Directions.S, MoveTypes.NORMAL_MOVE, { true }),
+                Move(0, 1, Directions.S, MoveTypes.NORMAL_MOVE, null),
                 Move(0, 2, Directions.S, MoveTypes.NORMAL_MOVE,
                     { yIdx -> yIdx == 2 }
                 ),
-                Move(1, 1, Directions.SE, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, 1, Directions.SW, MoveTypes.EAT_MOVE, { true })
+                Move(1, 1, Directions.SE, MoveTypes.EAT_MOVE, null),
+                Move(-1, 1, Directions.SW, MoveTypes.EAT_MOVE, null)
             )
             Players.WHITES -> {
                 existingMoves = arrayListOf(
-                    Move(0, -1, Directions.N, MoveTypes.NORMAL_MOVE, { true }),
+                    Move(0, -1, Directions.N, MoveTypes.NORMAL_MOVE, null),
                     Move(0, -2, Directions.N, MoveTypes.NORMAL_MOVE,
                         { yIdx -> yIdx == 7 }
                     ),
-                    Move(-1, -1, Directions.NW, MoveTypes.EAT_MOVE, { true }),
-                    Move(1, -1, Directions.NE, MoveTypes.EAT_MOVE, { true })
+                    Move(-1, -1, Directions.NW, MoveTypes.EAT_MOVE, null),
+                    Move(1, -1, Directions.NE, MoveTypes.EAT_MOVE, null)
                 )
             }
         }
@@ -59,7 +59,7 @@ class Pawn : Piece {
                     if (possibleSquare != null) {    // Checking if square exists
                         if (possibleSquare.hasPiece()) {    // Blocking further moves
                             blockedDirections.add(move.direction)
-                        } else if (move.condition(y)) {
+                        } else if (if (move.condition != null) move.condition!!(y) else true) {
                             possibleSquare.drawPossibleMove()
                             possibleMoves.add(possibleSquare.id)
                         }

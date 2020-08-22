@@ -22,22 +22,12 @@ class Bishop : Piece {
 
     constructor(playerType: Players) {
         this.playerType = playerType
-        when (playerType) {
-            Players.BLACKS -> existingMoves = arrayListOf(
-                Move(99, -99, Directions.NE, MoveTypes.EAT_MOVE, { true }),
-                Move(-99, -99, Directions.NW, MoveTypes.EAT_MOVE, { true }),
-                Move(99, 99, Directions.SE, MoveTypes.EAT_MOVE, { true }),
-                Move(-99, 99, Directions.SW, MoveTypes.EAT_MOVE, { true })
-            )
-            Players.WHITES -> {
-                existingMoves = arrayListOf(
-                    Move(99, -99, Directions.NE, MoveTypes.EAT_MOVE, { true }),
-                    Move(-99, -99, Directions.NW, MoveTypes.EAT_MOVE, { true }),
-                    Move(99, 99, Directions.SE, MoveTypes.EAT_MOVE, { true }),
-                    Move(-99, 99, Directions.SW, MoveTypes.EAT_MOVE, { true })
-                )
-            }
-        }
+        existingMoves = arrayListOf(
+            Move(99, -99, Directions.NE, MoveTypes.EAT_MOVE, null),
+            Move(-99, -99, Directions.NW, MoveTypes.EAT_MOVE, null),
+            Move(99, 99, Directions.SE, MoveTypes.EAT_MOVE, null),
+            Move(-99, 99, Directions.SW, MoveTypes.EAT_MOVE, null)
+        )
     }
 
     override fun drawPiece(x: Double, y: Double) {

@@ -22,30 +22,16 @@ class Horse : Piece {
 
     constructor(playerType: Players) {
         this.playerType = playerType
-        when (playerType) {
-            Players.BLACKS -> existingMoves = arrayListOf(
-                Move(1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(-2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(-2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                Move(2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, { true })
-            )
-            Players.WHITES -> {
-                existingMoves = arrayListOf(
-                    Move(1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(-1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(-1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(-2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(-2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, { true }),
-                    Move(2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, { true })
-                )
-            }
-        }
+        existingMoves = arrayListOf(
+            Move(1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(-1, -2, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(-1, 2, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(-2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(2, -1, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(-2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, null),
+            Move(2, 1, Directions.OTHER, MoveTypes.EAT_MOVE, null)
+        )
     }
 
     override fun drawPiece(x: Double, y: Double) {

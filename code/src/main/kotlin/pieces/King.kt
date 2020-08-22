@@ -22,30 +22,16 @@ class King : Piece {
 
     constructor(playerType: Players) {
         this.playerType = playerType
-        when (playerType) {
-            Players.BLACKS -> existingMoves = arrayListOf(
-                Move(0, -1, Directions.N, MoveTypes.EAT_MOVE, { true }),
-                Move(0, 1, Directions.S, MoveTypes.EAT_MOVE, { true }),
-                Move(1, 0, Directions.E, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, 0, Directions.W, MoveTypes.EAT_MOVE, { true }),
-                Move(1, -1, Directions.NE, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, -1, Directions.NW, MoveTypes.EAT_MOVE, { true }),
-                Move(1, 1, Directions.SE, MoveTypes.EAT_MOVE, { true }),
-                Move(-1, 1, Directions.SW, MoveTypes.EAT_MOVE, { true })
-            )
-            Players.WHITES -> {
-                existingMoves = arrayListOf(
-                    Move(0, -1, Directions.N, MoveTypes.EAT_MOVE, { true }),
-                    Move(0, 1, Directions.S, MoveTypes.EAT_MOVE, { true }),
-                    Move(1, 0, Directions.E, MoveTypes.EAT_MOVE, { true }),
-                    Move(-1, 0, Directions.W, MoveTypes.EAT_MOVE, { true }),
-                    Move(1, -1, Directions.NE, MoveTypes.EAT_MOVE, { true }),
-                    Move(-1, -1, Directions.NW, MoveTypes.EAT_MOVE, { true }),
-                    Move(1, 1, Directions.SE, MoveTypes.EAT_MOVE, { true }),
-                    Move(-1, 1, Directions.SW, MoveTypes.EAT_MOVE, { true })
-                )
-            }
-        }
+        existingMoves = arrayListOf(
+            Move(0, -1, Directions.N, MoveTypes.EAT_MOVE, null),
+            Move(0, 1, Directions.S, MoveTypes.EAT_MOVE, null),
+            Move(1, 0, Directions.E, MoveTypes.EAT_MOVE, null),
+            Move(-1, 0, Directions.W, MoveTypes.EAT_MOVE, null),
+            Move(1, -1, Directions.NE, MoveTypes.EAT_MOVE, null),
+            Move(-1, -1, Directions.NW, MoveTypes.EAT_MOVE, null),
+            Move(1, 1, Directions.SE, MoveTypes.EAT_MOVE, null),
+            Move(-1, 1, Directions.SW, MoveTypes.EAT_MOVE, null)
+        )
     }
 
     override fun drawPiece(x: Double, y: Double) {

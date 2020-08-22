@@ -22,22 +22,12 @@ class Tower : Piece {
 
     constructor(playerType: Players) {
         this.playerType = playerType
-        when (playerType) {
-            Players.BLACKS -> existingMoves = arrayListOf(
-                Move(0, -99, Directions.N, MoveTypes.EAT_MOVE, { true }),
-                Move(0, 99, Directions.S, MoveTypes.EAT_MOVE, { true }),
-                Move(99, 0, Directions.E, MoveTypes.EAT_MOVE, { true }),
-                Move(-99, 0, Directions.W, MoveTypes.EAT_MOVE, { true })
-            )
-            Players.WHITES -> {
-                existingMoves = arrayListOf(
-                    Move(0, -99, Directions.N, MoveTypes.EAT_MOVE, { true }),
-                    Move(0, 99, Directions.S, MoveTypes.EAT_MOVE, { true }),
-                    Move(99, 0, Directions.E, MoveTypes.EAT_MOVE, { true }),
-                    Move(-99, 0, Directions.W, MoveTypes.EAT_MOVE, { true })
-                )
-            }
-        }
+        existingMoves = arrayListOf(
+            Move(0, -99, Directions.N, MoveTypes.EAT_MOVE, null),
+            Move(0, 99, Directions.S, MoveTypes.EAT_MOVE, null),
+            Move(99, 0, Directions.E, MoveTypes.EAT_MOVE, null),
+            Move(-99, 0, Directions.W, MoveTypes.EAT_MOVE, null)
+        )
     }
 
     override fun drawPiece(x: Double, y: Double) {

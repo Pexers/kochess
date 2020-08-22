@@ -3,5 +3,5 @@ data class Move(
     val yCord: Int,
     val direction: Directions,
     val type: MoveTypes,
-    val condition: (args: Any) -> Boolean
+    val condition: ((args: Any) -> Boolean)?
 )
