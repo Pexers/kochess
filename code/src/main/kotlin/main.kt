@@ -25,7 +25,7 @@ fun main() {
 
     window.onmousedown = {
         if (squares.isNotEmpty()) {
-            val xIdx: Int = ((it.clientX / SQUARE_SIZE) - (POSITION_X / SQUARE_SIZE)).toInt()
+            val xIdx: Int = (it.clientX / SQUARE_SIZE).toInt()
             val yIdx: Int = (it.clientY / SQUARE_SIZE).toInt()
             val squareClicked = squares[getSquareId(xIdx, yIdx)]
             if (squareClicked != null) {    // Checking if square exists
@@ -47,7 +47,7 @@ fun main() {
 
 fun createSquare(xIdx: Int, yIdx: Int, color: String) {
     val square =
-        Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx + POSITION_X, SQUARE_SIZE * yIdx + POSITION_Y, color)
+        Square(getSquareId(xIdx, yIdx), SQUARE_SIZE * xIdx, SQUARE_SIZE * yIdx, color)
     when (yIdx) {
         1, 8 -> {   // First row
             when (xIdx) {
@@ -70,16 +70,17 @@ fun createSquare(xIdx: Int, yIdx: Int, color: String) {
 
 fun initializeContext(): CanvasRenderingContext2D {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
-    canvas.width = window.innerWidth - 50
-    canvas.height = window.innerHeight - 50
+    canvas.width = 600
+    canvas.height = 600
+    //canvas.setAttribute("class", "canvasPos")
     document.body?.appendChild(canvas)
     return canvas.getContext("2d") as CanvasRenderingContext2D
 }
 
 fun getSquareId(x: Int, y: Int): String {
-    return (96 + y).toChar() + x.toString()
+    return (96 + y).toChar() + x.toString() // 96 is the ASCII number for the letter 'a'
 }
 
-fun convertXCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE) - (POSITION_X / SQUARE_SIZE)).toInt()
+fun convertXCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE)).toInt()
 
-fun convertYCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE) - (POSITION_Y / SQUARE_SIZE)).toInt()
+fun convertYCordToInt(cord: Double): Int = ((cord / SQUARE_SIZE)).toInt()
