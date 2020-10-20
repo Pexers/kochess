@@ -1,2 +1,2 @@
 # kochess
-Playing chess on the web using Kotlin
+Small game project implemented in Kotlin for playing chess on the web.
