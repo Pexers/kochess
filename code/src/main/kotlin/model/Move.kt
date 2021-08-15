@@ -1,3 +1,5 @@
+package model
+
 data class Move(
     val xCord: Int,
     val yCord: Int,

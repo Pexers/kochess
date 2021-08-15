@@ -1,6 +1,10 @@
+package controller
+
+import model.Players
+import view.Square
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
-import pieces.*
+import view.pieces.*
 import kotlin.browser.document
 import kotlin.browser.window
 

@@ -1,8 +1,5 @@
-package pieces
+package model
 
-import Directions
-import Players
-import Move
 import org.w3c.dom.HTMLImageElement
 
 interface Piece {

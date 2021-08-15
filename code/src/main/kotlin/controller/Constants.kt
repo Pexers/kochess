@@ -1,3 +1,5 @@
+package controller
+
 import kotlin.browser.window
 
 // Sizes

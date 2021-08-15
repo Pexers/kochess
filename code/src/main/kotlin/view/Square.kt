@@ -1,4 +1,8 @@
-import pieces.Piece
+package view
+
+import controller.*
+import model.Piece
+import model.Players
 import kotlin.math.PI
 
 class Square {

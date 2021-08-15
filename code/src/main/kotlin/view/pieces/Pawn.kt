@@ -1,15 +1,13 @@
-package pieces
+package view.pieces
 
-import Directions
-import PIECE_WIDTH
-import Players
-import Move
-import SQUARE_SIZE
-import Square
-import context
-import getSquareId
+import controller.PIECE_WIDTH
+import controller.SQUARE_SIZE
+import controller.context
+import controller.getSquareId
 import org.w3c.dom.*
-import squares
+import controller.squares
+import model.*
+import view.Square
 import kotlin.browser.window
 
 class Pawn : Piece {
