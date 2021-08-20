@@ -35,7 +35,7 @@ class Queen : Piece {
     override fun drawPiece(x: Double, y: Double) {
         context?.beginPath()
         image.src = "./pieces-2D-icons/queen_${playerType.color}.png"
-        context?.drawImage(image, x + SQUARE_SIZE / 4, y + SQUARE_SIZE / 6, PIECE_WIDTH, 40.0)
+        context?.drawImage(image, x + SQUARE_SIZE / 4, y + SQUARE_SIZE / 6, PIECE_WIDTH, 50.0)
     }
 
     override fun createPossibleMoves(x: Int, y: Int) {

@@ -31,7 +31,7 @@ class Tower : Piece {
     override fun drawPiece(x: Double, y: Double) {
         context?.beginPath()
         image.src = "./pieces-2D-icons/tower_${playerType.color}.png"
-        context?.drawImage(image, x + SQUARE_SIZE / 4, y + SQUARE_SIZE / 4, PIECE_WIDTH, 35.0)
+        context?.drawImage(image, x + SQUARE_SIZE / 4, y + SQUARE_SIZE / 4, PIECE_WIDTH, 45.0)
     }
 
     override fun createPossibleMoves(x: Int, y: Int) {
