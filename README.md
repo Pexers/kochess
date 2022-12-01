@@ -4,6 +4,5 @@ An experimental project using **Kotlin/JS** for playing chess on the web browser
 You can find more information regarding Kotlin/JS [here](https://kotlinlang.org/docs/js-project-setup.html).
 
 <p align="center">
-<img src="https://github.com/Pexers/kochess/blob/master/images/game1.jpg" width="300">
+<img src="https://github.com/Pexers/kochess/blob/master/images/game1.jpg" width="310">
 </p>
-
